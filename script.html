@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rock-Paper-scissors Game</title>
+    <meta charset = "UTF-8"/>
+</head>
+<body>
+    <script>
+    function getRandomInt(maxNum) {
+      //give a number, return range 0 to number (exclusive), ie, [0 - num)
+      //Math.random() returns a floating point num ranging from [0 - 1)
+      //multiplying that to Math.floor(maxNum) gives
+      return Math.floor(Math.random() * Math.floor(maxNum));
+    }
+
+    function computerPlay(){ //returns a random choice from game options
+      let gameOptions = ['rock', 'paper', 'scissors'];
+      return gameOptions[getRandomInt(gameOptions.length)];
+    }
+
+    function playRound(playerSelection, computerSelection) {
+      let gameOptions = ['rock', 'paper', 'scissors'];
+      //check if player gives a valid option
+      if (!(gameOptions.includes(playerSelection))) {
+        return 'nothing';
+      }
+
+      //player select rock scenario
+      if (playerSelection == 'rock' && computerSelection == 'paper'){
+        return 'loser';
+      }
+      else if (playerSelection == 'rock' && computerSelection == 'scissors') {
+        return 'winner';
+      }
+      else{
+        return 'draw';
+      }
+
+      //player selects paper scenario
+      if (playerSelection == 'paper' && computerSelection == 'scissors'){
+        return 'loser';
+      }
+      else if (playerSelection == 'paper' && computerSelection == 'rock') {
+        return 'winner';
+      }
+      else{
+        return 'draw';
+      }
+
+      //player selects scissors scenario
+      if (playerSelection == 'scissors' && computerSelection == 'rock'){
+        return 'loser';
+      }
+      else if (playerSelection == 'scissors' && computerSelection == 'paper') {
+        return 'winner';
+      }
+      else{
+        return 'draw';
+      }
+    }
+
+    function gameEngine(){
+      let playerTally = 0;
+      let computerTally = 0;
+      let playerWin;
+      let i = 0;
+
+      //best of 5 rounds not including draws
+      while (i < 5) {
+        let playerChoice = prompt("Rock, paper, scissors?").toLowerCase();
+        let computerChoice = computerPlay();
+
+        playerWin = playRound(playerChoice, computerChoice);
+
+        if (playerWin == 'winner') {
+          i++;
+          playerTally++;
+          console.log(`You: ${playerChoice} / Computer: ${computerChoice}
+            You won this round! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
+        } else if (playerWin == 'loser') {
+          i++;
+          computerTally++;
+          console.log(`You: ${playerChoice} / Computer: ${computerChoice}
+            You lose this round! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
+        } else if (playerWin == 'draw') {
+          console.log(`You: ${playerChoice} / Computer: ${computerChoice}
+            It's a draw this round! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
+        } else {
+          console.log(`You: ${playerChoice}. Computer: ${computerChoice}.
+            Please give a valid input! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
+        }
+      }
+
+      if (playerTally == computerTally) {
+        console.log(`Final tally is You: ${playerTally} / Computer: ${computerTally}. IT'S A DRAW!`);
+      } else if (playerTally > computerTally) {
+        console.log(`Final tally is You: ${playerTally} / Computer: ${computerTally}. YOU WIN!`);
+      } else{
+        console.log(`Final tally is You: ${playerTally} / Computer: ${computerTally}. YOU LOSE!`);
+      }
+    }
+
+    console.log(gameEngine());
+
+    </script>
+</body>
+</html>
