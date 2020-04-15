@@ -3,105 +3,147 @@
 <head>
     <title>Rock-Paper-scissors Game</title>
     <meta charset = "UTF-8"/>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
+
 <body>
-    <script>
-    function getRandomInt(maxNum) {
-      //give a number, return range 0 to number (exclusive), ie, [0 - num)
-      //Math.random() returns a floating point num ranging from [0 - 1)
-      //multiplying that to Math.floor(maxNum) gives
-      return Math.floor(Math.random() * Math.floor(maxNum));
-    }
+  <p>
+    <button id="btn1">Rock</button>
+    <button id="btn2">Paper</button>
+    <button id="btn3">Scissors</button>
+    <br>
+    <div id="result-container">
 
-    function computerPlay(){ //returns a random choice from game options
-      let gameOptions = ['rock', 'paper', 'scissors'];
-      return gameOptions[getRandomInt(gameOptions.length)];
-    }
-
-    function playRound(playerSelection, computerSelection) {
-      let gameOptions = ['rock', 'paper', 'scissors'];
-      //check if player gives a valid option
-      if (!(gameOptions.includes(playerSelection))) {
-        return 'nothing';
-      }
-
-      //player select rock scenario
-      if (playerSelection == 'rock' && computerSelection == 'paper'){
-        return 'loser';
-      }
-      else if (playerSelection == 'rock' && computerSelection == 'scissors') {
-        return 'winner';
-      }
-      else{
-        return 'draw';
-      }
-
-      //player selects paper scenario
-      if (playerSelection == 'paper' && computerSelection == 'scissors'){
-        return 'loser';
-      }
-      else if (playerSelection == 'paper' && computerSelection == 'rock') {
-        return 'winner';
-      }
-      else{
-        return 'draw';
-      }
-
-      //player selects scissors scenario
-      if (playerSelection == 'scissors' && computerSelection == 'rock'){
-        return 'loser';
-      }
-      else if (playerSelection == 'scissors' && computerSelection == 'paper') {
-        return 'winner';
-      }
-      else{
-        return 'draw';
-      }
-    }
-
-    function gameEngine(){
-      let playerTally = 0;
-      let computerTally = 0;
-      let playerWin;
-      let i = 0;
-
-      //best of 5 rounds not including draws
-      while (i < 5) {
-        let playerChoice = prompt("Rock, paper, scissors?").toLowerCase();
-        let computerChoice = computerPlay();
-
-        playerWin = playRound(playerChoice, computerChoice);
-
-        if (playerWin == 'winner') {
-          i++;
-          playerTally++;
-          console.log(`You: ${playerChoice} / Computer: ${computerChoice}
-            You won this round! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
-        } else if (playerWin == 'loser') {
-          i++;
-          computerTally++;
-          console.log(`You: ${playerChoice} / Computer: ${computerChoice}
-            You lose this round! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
-        } else if (playerWin == 'draw') {
-          console.log(`You: ${playerChoice} / Computer: ${computerChoice}
-            It's a draw this round! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
-        } else {
-          console.log(`You: ${playerChoice}. Computer: ${computerChoice}.
-            Please give a valid input! Current tally is You: ${playerTally} / Computer: ${computerTally}`);
-        }
-      }
-
-      if (playerTally == computerTally) {
-        console.log(`Final tally is You: ${playerTally} / Computer: ${computerTally}. IT'S A DRAW!`);
-      } else if (playerTally > computerTally) {
-        console.log(`Final tally is You: ${playerTally} / Computer: ${computerTally}. YOU WIN!`);
-      } else{
-        console.log(`Final tally is You: ${playerTally} / Computer: ${computerTally}. YOU LOSE!`);
-      }
-    }
-
-    console.log(gameEngine());
-
-    </script>
+    </div>
+  </p>
 </body>
+
+<script>
+const container = document.querySelector('#result-container');
+const resultOutputDiv = document.createElement('div');
+const tallyDiv = document.createElement('div');
+const gameEndDiv = document.createElement('div');
+let totalGamesPlayed = 0;
+let computerScore = 0;
+let playerScore = 0;
+
+//add event listeners for each button
+const btn1 = document.querySelector("#btn1");
+btn1.addEventListener('click', () => {
+  let computerSelect = computerPlay();
+  let result = playRound('rock',computerSelect);
+
+  resultOutputDiv.textContent = `You chose rock and computer chose ${computerSelect} - ${result} this round!`;
+  tallyDiv.textContent = `Current Score: Player: ${playerScore} | ${computerScore}`;
+
+  container.appendChild(resultOutputDiv);
+  container.appendChild(tallyDiv);
+
+  //add check
+  checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container);
+});
+
+const btn2 = document.querySelector("#btn2");
+btn2.addEventListener('click', () => {
+  let computerSelect = computerPlay();
+  let result = playRound('paper',computerSelect);
+
+  resultOutputDiv.textContent = `You chose paper and computer chose ${computerSelect} - ${result} this round!`;
+  tallyDiv.textContent = `Current Score: Player: ${playerScore} | ${computerScore}`;
+
+  container.appendChild(resultOutputDiv);
+  container.appendChild(tallyDiv);
+  checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container);
+});
+
+const btn3 = document.querySelector("#btn3");
+btn3.addEventListener('click', () => {
+  let computerSelect = computerPlay();
+  let result = playRound('scissors',computerSelect);
+
+  resultOutputDiv.textContent = `You chose scissors and computer chose ${computerSelect} - ${result} this round!`;
+  tallyDiv.textContent = `Current Score: Player: ${playerScore} | ${computerScore}`;
+
+  container.appendChild(resultOutputDiv);
+  container.appendChild(tallyDiv);  
+  checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container);
+});
+
+
+
+
+
+function getRandomInt(maxNum) {
+  //give a number, return range 0 to number (exclusive), ie, [0 - num)
+  //Math.random() returns a floating point num ranging from [0 - 1)
+  //multiplying that to Math.floor(maxNum) gives
+  return Math.floor(Math.random() * Math.floor(maxNum));
+}
+
+function computerPlay(){ //returns a random choice from game options for computer
+  let gameOptions = ['rock', 'paper', 'scissors'];
+  return gameOptions[getRandomInt(gameOptions.length)];
+}
+
+function playRound(playerSelection, computerSelection) {
+  let gameOptions = ['rock', 'paper', 'scissors'];
+  //check if player gives a valid option
+  if (!(gameOptions.includes(playerSelection))) {
+    return 'nothing';
+  }
+  //player selects rock scenario
+  if (playerSelection == 'rock' && computerSelection == 'paper'){
+    computerScore += 1;
+    totalGamesPlayed++;
+    return 'you lose';
+  }
+  else if (playerSelection == 'rock' && computerSelection == 'scissors') {
+    playerScore += 1;
+    totalGamesPlayed++;
+    return 'you win';
+  }
+  //player selects paper
+  else if (playerSelection == 'paper' && computerSelection == 'scissors'){
+    computerScore += 1;
+
+    totalGamesPlayed++;
+    return 'you lose';
+  }
+  else if (playerSelection == 'paper' && computerSelection == 'rock') {
+    playerScore += 1;
+
+    totalGamesPlayed++;
+    return 'you win';
+  }
+  //player selects scissors scenario
+  else if (playerSelection == 'scissors' && computerSelection == 'rock'){
+    computerScore += 1;
+
+    totalGamesPlayed++;
+    return 'you lose';
+  }
+  else if (playerSelection == 'scissors' && computerSelection == 'paper') {
+    playerScore += 1;
+
+    totalGamesPlayed++;
+    return 'you win';
+  }
+  else{
+    return 'it\'s a draw';
+  }
+}
+
+function checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEnd, container){
+  if (totalGamesPlayed == 5 && (playerScore > computerScore)){
+    gameEnd.textContent = 'GAME OVER. YOU WIN!';
+    container.appendChild(gameEnd);
+  }
+  else if (totalGamesPlayed == 5 && (playerScore < computerScore)) {
+    gameEnd.textContent = 'GAME OVER. YOU LOSE!';
+    container.appendChild(gameEnd);
+  }
+  return
+}
+
+</script>
 </html>
