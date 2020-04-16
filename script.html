@@ -34,13 +34,20 @@ btn1.addEventListener('click', () => {
   let result = playRound('rock',computerSelect);
 
   resultOutputDiv.textContent = `You chose rock and computer chose ${computerSelect} - ${result} this round!`;
-  tallyDiv.textContent = `Current Score: Player: ${playerScore} | ${computerScore}`;
+  tallyDiv.textContent = `Current Score: Player: ${playerScore} | Computer: ${computerScore}`;
 
   container.appendChild(resultOutputDiv);
   container.appendChild(tallyDiv);
 
-  //add check
-  checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container);
+  //if the game is over, iterate through and disable all of the buttons
+  if (checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container)){
+    const allButtons = document.querySelectorAll('button');
+    allButtons.forEach((button) => {
+      button.disabled = true;
+    });
+
+  }
+
 });
 
 const btn2 = document.querySelector("#btn2");
@@ -49,24 +56,41 @@ btn2.addEventListener('click', () => {
   let result = playRound('paper',computerSelect);
 
   resultOutputDiv.textContent = `You chose paper and computer chose ${computerSelect} - ${result} this round!`;
-  tallyDiv.textContent = `Current Score: Player: ${playerScore} | ${computerScore}`;
+  tallyDiv.textContent = `Current Score: Player: ${playerScore} | Computer: ${computerScore}`;
 
   container.appendChild(resultOutputDiv);
   container.appendChild(tallyDiv);
-  checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container);
+
+  //if the game is over, iterate through and disable all of the buttons
+  if (checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container)){
+    const allButtons = document.querySelectorAll('button');
+    allButtons.forEach((button) => {
+      button.disabled = true;
+    });
+  }
+
 });
 
 const btn3 = document.querySelector("#btn3");
-btn3.addEventListener('click', () => {
+btn3.addEventListener('click', function (e) {
+  //console.log(e);
   let computerSelect = computerPlay();
   let result = playRound('scissors',computerSelect);
 
   resultOutputDiv.textContent = `You chose scissors and computer chose ${computerSelect} - ${result} this round!`;
-  tallyDiv.textContent = `Current Score: Player: ${playerScore} | ${computerScore}`;
+  tallyDiv.textContent = `Current Score: Player: ${playerScore} | Computer: ${computerScore}`;
 
   container.appendChild(resultOutputDiv);
-  container.appendChild(tallyDiv);  
-  checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container);
+  container.appendChild(tallyDiv);
+
+  //if the game is over, iterate through and disable all of the buttons
+  if (checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEndDiv, container)){
+    const allButtons = document.querySelectorAll('button');
+    allButtons.forEach((button) => {
+      button.disabled = true;
+    });
+  }
+
 });
 
 
@@ -137,10 +161,12 @@ function checkForGameEnd(totalGamesPlayed, playerScore, computerScore, gameEnd, 
   if (totalGamesPlayed == 5 && (playerScore > computerScore)){
     gameEnd.textContent = 'GAME OVER. YOU WIN!';
     container.appendChild(gameEnd);
+    return true;
   }
   else if (totalGamesPlayed == 5 && (playerScore < computerScore)) {
     gameEnd.textContent = 'GAME OVER. YOU LOSE!';
     container.appendChild(gameEnd);
+    return true;
   }
   return
 }
